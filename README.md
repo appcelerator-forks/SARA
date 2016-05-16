@@ -1,4 +1,4 @@
-![](https://github.com/mcongrove/SARA/raw/master/SARA.png)
+![](https://raw.githubusercontent.com/mcongrove/SARA/master/SARA.jpg)
 
 # SARA
 Search and Rescue Application, entry for the 2016 Axway Global Hackathon.
