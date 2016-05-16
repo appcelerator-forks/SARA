@@ -2,7 +2,58 @@
 mapView.setCenterLatLng([30.25,-97.75]);
 */
 
-var mapbox = require("com.polancomedia.mapbox");
+var mapbox = require("com.polancomedia.mapbox"),
+	http = require("http");
+
+var App = {
+	Geo: {
+		latitude: null,
+		longitude: null
+	},
+	init: function() {
+		if(Ti.Geolocation.locationServicesEnabled) {
+			Ti.Geolocation.purpose = "Geolocation Tracking";
+			Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST;
+			Ti.Geolocation.distanceFilter = 95;
+			Ti.Geolocation.preferredProvider = Ti.Geolocation.PROVIDER_GPS;
+		}
+		
+		Ti.Geolocation.addEventListener("location", function(_event) {
+			if(_event.error) {
+				Ti.API.error(_event.error);
+			} else {
+				App.Geo = _event.coords;
+				
+				App.sendTrack();
+			}
+		});
+		
+		Ti.Geolocation.getCurrentPosition(function(_event) {
+			if(_event.error) {
+				Ti.API.error(_event.error);
+			} else {
+				App.Geo = _event.coords;
+				
+				App.sendTrack();
+			}
+		});
+	},
+	sendTrack: function() {
+		http.request({
+			type: "POST",
+			url: "http://",
+			data: App.geo,
+			success: function() {
+				Ti.API.info("Data Sent");
+			},
+			failure: function() {
+				Ti.API.error("Data Not Sent");
+			}
+		});
+	}
+};
+
+App.init();
 
 var mapView = mapbox.createView({
     map: "mcongrove.057j94i6",
