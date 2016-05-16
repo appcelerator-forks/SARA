@@ -1,0 +1,18 @@
+{
+    "type": "api",
+    "group": "arrow",
+    "dependencies": {
+        "connector/appc.arrowdb": "*",
+        "connector/appc.composite": "*"
+    },
+    "cloud": {
+        "guid": "573a4c6dbac4ea23d51a1cc6",
+        "container": "Dev",
+        "minimum": 1,
+        "maximum": 1,
+        "maxqueuesize": 50,
+        "environment": {},
+        "cname": null,
+        "certificate": null
+    }
+}
