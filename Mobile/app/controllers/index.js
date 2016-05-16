@@ -1,11 +1,15 @@
-/*
-mapView.setCenterLatLng([30.25,-97.75]);
-*/
-
 var mapbox = require("com.polancomedia.mapbox"),
 	http = require("http");
 
 var App = {
+	GTID: 1,
+	Status: 1,
+	StatusTypes: [
+		"DEPLOYING",
+		"ENROUTE",
+		"INSERTED",
+		"RTB"
+	],
 	Geo: {
 		latitude: null,
 		longitude: null
@@ -38,6 +42,15 @@ var App = {
 			}
 		});
 	},
+	cycleStatus: function() {
+		if(App.Status < (App.StatusTypes.length - 1)) {
+			App.Status = App.Status + 1;
+		} else {
+			App.Status = 0;
+		}
+		
+		titleStatus.text = App.StatusTypes[App.Status];
+	},
 	sendTrack: function() {
 		http.request({
 			type: "POST",
@@ -48,6 +61,53 @@ var App = {
 			},
 			failure: function() {
 				Ti.API.error("Data Not Sent");
+			}
+		});
+	},
+	getWaypoints: function() {
+		// Can't do this, MapBox limitation on types of annotations :(
+	},
+	getTracks: function() {
+		http.request({
+			type: "GET",
+			format: "JSON",
+			url: "https://64807c708dc35312621deb67f785187a27fd038c.cloudapp-enterprise.appcelerator.com/api/track",
+			headers: [
+				{
+					name: "Authorization",
+					value: "Basic " + Ti.Utils.base64encode("kID6bMfcnQXqHWaLO9veHUemMzEFwVOj:")
+				}
+			],
+			success: function(_data) {
+				mapView.removeAllAnnotations();
+				
+				var tracks = _data.tracks;
+				var activeAnnotated = false;
+				
+				for(var i = 0, x = tracks.length; i < x; i++) {
+					var wp = tracks[i];
+					
+					if(wp.gtid == App.GTID) {
+						// var markerType = (wp.gtid == App.GTID) ? "self" : "other";
+						
+						var a = mapbox.createAnnotation({
+							latitude: wp.coord.lat,
+							longitude: wp.coord.lon,
+							// markerImage: "mark-gt-" + markerType + ".png"
+						});
+						
+						mapView.addAnnotation(a);
+						
+						if(!activeAnnotated) {
+							mapView.setCenterLatLng([wp.coord.lat, wp.coord.lon]);
+							
+							activeAnnotated = true;
+						}
+					}
+				}
+			},
+			failure: function() {
+				Ti.API.error("Data Not Retrieved");
 			}
 		});
 	}
@@ -61,11 +121,12 @@ var mapView = mapbox.createView({
     maxZoom: 12,
     zoom: 9,
     accessToken: "pk.eyJ1IjoibWNvbmdyb3ZlIiwiYSI6ImNpbzlqNWJmajAzMnJ2aWx6bGFrcXY4YmwifQ.CeCazlWXKIh79zYFY13RfQ",
-    centerLatLng: [30.25,-97.75],
+    centerLatLng: [30.25, -97.75],
     width: Ti.UI.FILL,
     height: Ti.UI.FILL,
     hideAttribution: true,
-    userLocation: true
+    backgroundColor: "#000",
+    tintColor: "#2FA59E"
 });
 
 mapView.clearTileCache();
@@ -124,6 +185,8 @@ var titleStatus = Ti.UI.createLabel({
 	text: "ENROUTE"
 });
 
+titleStatus.addEventListener("click", App.cycleStatus);
+
 var buttons = Ti.UI.createView({
 	width: Ti.UI.SIZE,
 	height: 31,
@@ -168,3 +231,5 @@ $.Main.add(buttons);
 $.Main.add(header);
 
 $.Main.open();
+
+App.getTracks();
