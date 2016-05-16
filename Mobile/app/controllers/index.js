@@ -28,7 +28,8 @@ var App = {
 			} else {
 				App.Geo = _event.coords;
 				
-				App.sendTrack();
+				// Faking geo movement data
+				// App.sendTrack();
 			}
 		});
 		
@@ -38,7 +39,8 @@ var App = {
 			} else {
 				App.Geo = _event.coords;
 				
-				App.sendTrack();
+				// Faking geo movement data
+				// App.sendTrack();
 			}
 		});
 	},
@@ -54,8 +56,21 @@ var App = {
 	sendTrack: function() {
 		http.request({
 			type: "POST",
-			url: "http://",
-			data: App.geo,
+			url: "https://64807c708dc35312621deb67f785187a27fd038c.cloudapp-enterprise.appcelerator.com/api/track",
+			headers: [
+				{
+					name: "Authorization",
+					value: "Basic " + Ti.Utils.base64encode("kID6bMfcnQXqHWaLO9veHUemMzEFwVOj:")
+				}
+			],
+			data: {
+				gtid: App.GTID,
+				coord: {
+					lat: App.Geo.latitude,
+					lon: App.Geo.longitude
+				},
+				status: App.Status
+			},
 			success: function() {
 				Ti.API.info("Data Sent");
 			},
@@ -185,8 +200,6 @@ var titleStatus = Ti.UI.createLabel({
 	text: "ENROUTE"
 });
 
-titleStatus.addEventListener("click", App.cycleStatus);
-
 var buttons = Ti.UI.createView({
 	width: Ti.UI.SIZE,
 	height: 31,
@@ -203,16 +216,18 @@ var buttonZoomIn = Ti.UI.createImageView({
 	image: "zoom-in.png"
 });
 
-buttonZoomIn.addEventListener("click", function() {
-	mapView.setZoom(mapView.zoom + 1);
-});
-
 var buttonZoomOut = Ti.UI.createImageView({
 	height: 31,
 	width: 31,
 	bottom: 0,
 	left: 15,
 	image: "zoom-out.png"
+});
+
+titleStatus.addEventListener("click", App.cycleStatus);
+
+buttonZoomIn.addEventListener("click", function() {
+	mapView.setZoom(mapView.zoom + 1);
 });
 
 buttonZoomOut.addEventListener("click", function() {
@@ -233,3 +248,4 @@ $.Main.add(header);
 $.Main.open();
 
 App.getTracks();
+//App.getWaypoints();
