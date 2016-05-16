@@ -17,6 +17,7 @@
 | `timestamp`	| datetime	| UNIX timestamp
 | `coord`		| object	| Lat/lon pair
 | `status`		| int		| Current sortie status: `0` (deploying), `1` (enroute), `2` (inserted), `3` (rtb)
+| `gtid`		| int	| Ground team ID
 
 #### waypoint
 
