@@ -66,6 +66,7 @@ Creates a track event, requested from mobile device.
 ###### Params
 * `coord`: lat/lon pair object
 * `status`: `1` (deploying), `2` (enroute), `3` (inserted), `4` (rtb)
+* `gtid`: GUID of ground team
 
 ### /postWaypoint
 ###### Description
