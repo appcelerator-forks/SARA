@@ -3,7 +3,7 @@
 #### sortie
 
 | name			| type		| description	|
-| -				| -			| -				|
+| ---				| ---			| ---				|
 | `id`			| int		| Ground team sortie ID (`XXXX`, e.g. "G-0001")
 | `callsign`	| string	| Ground team radio callsign (e.g. `SAR-124`)
 | `active`		| boolean	| Whether the sortie is 'active' or 'staged' / 'complete'
@@ -12,7 +12,7 @@
 #### track
 
 | name			| type		| description	|
-| -				| -			| -				|
+| ---				| ---			| ---				|
 | `id`			| int		| GUID for the track event
 | `timestamp`	| datetime	| UNIX timestamp
 | `coord`		| object	| Lat/lon pair
@@ -22,7 +22,7 @@
 #### waypoint
 
 | name			| type		| description	|
-| -				| -			| -				|
+| ---				| ---			| ---				|
 | `id`			| int		| GUID for the waypoint
 | `type`		| int		| Type of waypoint: `0` (auto), `1` (manual)
 | `timestamp`	| datetime	| UNIX timestamp
