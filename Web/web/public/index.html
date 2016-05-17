@@ -1,21 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/ico" href="images/favicon.ico">
-    <title>Powered by Appcelerator Arrow</title>
-    <style>
-        html { 
-           width:100%;
-           height:100%;
-           background:url(images/arrow.png) center center no-repeat;
-           background-size: 500px 500px;
-           background-color: #fff;
-        }
-    </style>
+	<title>SARA</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+	<link id="favicon" rel="shortcut icon" href="./img/sara-favicon.png"> 
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> 
+
+	<link rel="stylesheet" href="css/dashboard.css">
+
 </head>
+
+
 <body>
+		<div class="row header">
+			<div class="col-md-12">
+				<span class="appname">SARA</span> <span class="apptype">IC DASHBOARD</span>
+			</div>
+		</div>
+<div class="container-fuild row">
+	<div class="navigation col-sm-3 col-md-2">
+		<ul>
+			<li class="dashboard" data-pagename="page-map">
+				<a class="menulink"  role="link" href="#"> 
+				<span class="icon"></span><span class="menutext">Map</span>
+				</a>
+				<div class="mapdetails">
+					<span class="title">IC Actions</span>
+					<span class="icon margin" title="Set a new waypoint"><a class="icon newWaypoint" href="#"></a></span>
+					<span class="icon" title="Pause operation"><a class="icon pause" href="#"></a></span>
+					<span class="icon" title="Send Alert"><a class="icon sendalert" href="#"></a></span>
+					<span class="icon" title="Send request to team"><a class="icon sendrequest" href="#"></a></span>
+					<span class="title">ACTIVE SORTIES</span>
+					<div class="sortie"><span class="sortiename">G0001</span><span class="sortieid">TC-124</span></div>
+					<div class="sortie"><span class="sortiename">G0002</span><span class="sortieid">TC-409</span></div>
+					<span class="title">STAGED SORTIES</span>
+					<div class="sortie"><span class="sortiename">G0003</span><span class="sortieid">TC-75</span></div>
+				</div>
+			</li>
+
+			<li class="teams" data-pagename="page-team">
+				<a class="menulink" role="link" href="#"> 
+				<span class="icon"></span><span class="menutext">Teams</span>
+				</a>
+			</li>
+			
+			<li class="analytics" data-pagename="page-analytics">
+				<a class="menulink" role="link" href="#"> 
+				<span class="icon"></span><span class="menutext">Analytics</span>
+				</a>
+			</li>
+			<li class="settings" data-pagename="page-settings">
+				<a class="menulink" role="link" href="#">
+				<span class="icon"></span><span class="menutext">Settings</span>
+				</a>
+			</li>
+		</ul>
+		<div class="legend">
+
+		</div>
+	</div>
+
+
+	<div class="content col-sm-9 col-md-10">
+
+
+<!-- 		<div class="row content"> -->
+			<iframe id="iframe" class="row" src="empty.html" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0" width="100%">
+    		</iframe>
+<!-- 		</div> -->
+		
+	</div>
+
+</div>
+
+
+<script>
+$("#iframe").height($(window).height()-60); // accomodate fixed header
+</script>	
+<script src="js/dashboard.js"></script> 
+<script>
+$(".navigation li:first a").click(); // first menu selected  by default
+</script> 
+
+	
 </body>
 </html>
