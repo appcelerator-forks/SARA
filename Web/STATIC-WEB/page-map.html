@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta charset=utf-8 />
+<title>A simple map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+
+<div id='map'></div>
+
+<script>
+var APIKEY = 'apikey:a0lENmJNZmNuUVhxSFdhTE85dmVIVWVtTXpFRndWT2o6';
+var AUTH = 'Basic ' + APIKEY.replace(/[\r\n]+/gm, '');
+L.mapbox.accessToken = 'pk.eyJ1IjoibWNvbmdyb3ZlIiwiYSI6ImNpbzlqNWJmajAzMnJ2aWx6bGFrcXY4YmwifQ.CeCazlWXKIh79zYFY13RfQ';
+
+var map = L.mapbox.map('map')
+    .setView([29.992835, -97.602539], 11);
+
+L.mapbox.styleLayer('mapbox://styles/mcongrove/cioa68k8d003gadnm3bcws1bn').addTo(map);
+
+var markerTrack = L.mapbox.featureLayer().addTo(map),
+	geoTrack = [];
+
+function getTracks() {
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange = function() {
+		if (this.readyState === 4) {
+			var _data = JSON.parse(this.responseText).tracks;
+			
+			for(var i = 0, x = _data.length; i < x; i++) {
+				var t = _data[i];
+				
+				geoTrack.push({
+					type: "Feature",
+					geometry: {
+						type: "Point",
+						coordinates: [t.coord.lon, t.coord.lat]
+					},
+					properties: {
+						icon: {
+							iconUrl: "./img/map/mark-track.png",
+							iconSize: [45, 45]
+						}
+					}
+				});
+			}
+			
+			markerTrack.on('layeradd', function(e) {
+				var marker = e.layer,
+					feature = marker.feature;
+				
+				marker.setIcon(L.icon(feature.properties.icon));
+			});
+			
+			markerTrack.setGeoJSON(geoTrack);
+		}
+	};
+	
+	xhr.open("GET", "https://64807c708dc35312621deb67f785187a27fd038c.cloudapp-enterprise.appcelerator.com/api/track");
+	xhr.setRequestHeader('Authorization', 'Basic a0lENmJNZmNuUVhxSFdhTE85dmVIVWVtTXpFRndWT2o6');
+	xhr.send();
+}
+
+function getWaypoints() {
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange = function() {
+		if (this.readyState === 4) {
+			var _data = JSON.parse(this.responseText).waypoints;
+			
+			for(var i = 0, x = _data.length; i < x; i++) {
+				var t = _data[i];
+				
+				var type = t.type == 0 ? "auto" : "manual";
+				
+				geoTrack.push({
+					type: "Feature",
+					geometry: {
+						type: "Point",
+						coordinates: [t.coord.lon, t.coord.lat]
+					},
+					properties: {
+						icon: {
+							iconUrl: "./img/map/mark-wp-" + type + ".png",
+							iconSize: t.type == 0 ? [50, 50] : [100, 100]
+						}
+					}
+				});
+			}
+			
+			markerTrack.on('layeradd', function(e) {
+				var marker = e.layer,
+					feature = marker.feature;
+				
+				marker.setIcon(L.icon(feature.properties.icon));
+			});
+			
+			markerTrack.setGeoJSON(geoTrack);
+		}
+	};
+	
+	xhr.open("GET", "https://64807c708dc35312621deb67f785187a27fd038c.cloudapp-enterprise.appcelerator.com/api/waypoint");
+	xhr.setRequestHeader('Authorization', 'Basic a0lENmJNZmNuUVhxSFdhTE85dmVIVWVtTXpFRndWT2o6');
+	xhr.send();
+}
+
+getTracks();
+getWaypoints();
+</script>
+
+</body>
+</html>
